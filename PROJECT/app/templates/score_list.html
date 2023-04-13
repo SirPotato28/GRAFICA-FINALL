@@ -1,0 +1,67 @@
+<!-- score_list.html -->
+<html>
+<head>
+    <title>Lista de puntajes</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Lista de puntajes</h1>
+        <h2>Total de alumnos: {{ total_students }}</h2> <!-- Mostramos la variable total_students -->
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Puntaje</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for score in scores %}
+                <tr>
+                    <td>{{ score.name }}</td>
+                    <td>{{ score.puntaje }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <canvas id="myChart"></canvas>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            var ctx = document.getElementById('myChart').getContext('2d');
+            var data = {
+                labels: [{% for score in scores %}"{{ score.name }}", {% endfor %}],
+                datasets: [{
+                    label: 'Puntaje',
+                    data: [{% for score in scores %}{{ score.puntaje }}, {% endfor %}],
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    borderWidth: 1,
+                    pointBackgroundColor: 'rgba(255, 99, 132, 1)',
+                    pointBorderColor: '#fff',
+                    pointBorderWidth: 1,
+                    pointRadius: 4,
+                    pointHoverBackgroundColor: '#fff',
+                    pointHoverBorderColor: 'rgba(255, 99, 132, 1)',
+                    pointHoverBorderWidth: 2,
+                }]
+            };
+            var options = {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            };
+            var myChart = new Chart(ctx, {
+                type: 'line',
+                data: data,
+                options: options
+            });
+        });
+    </script>
+</body>
+</html>
